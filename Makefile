@@ -1,7 +1,7 @@
 LIBS     = -lncurses
 TARGET   = life
-OBJECTS  = main.o life.o
-VERSION  = 0.1.9.0
+OBJECTS  = main.o
+VERSION  = 0.2.0.0
 CXXFLAGS = -Wall
 TARBALL  = ../$(TARGET)-$(VERSION).tar.bz2
 
@@ -22,6 +22,5 @@ bak:
 
 ###################################################
 
-main.o: life.h
-life.o: life.h
+main.o: 
 
