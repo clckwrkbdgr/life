@@ -1,67 +1,11 @@
-/** life.cpp - Conway's Game of Life.
+/** life.cpp - Conway's Game of Life definitioin and management.
  * author antifin
  * version 1.0.1
  * license WTFPLv2
  */
-#include <ncurses.h>
+
 #include <cstdlib>
-#include <ctime>
-
-#define HASH_COUNT 10
-
-struct Life {
-	int *map,*buffer;
-	int width,height;
-	unsigned int hashes[HASH_COUNT];
-	int currentHashIndex;
-};
-Life* newLife(int width,int height);
-void bigBang(Life *life);
-void tick(Life *life);
-void freeLife(Life *life);
-
-unsigned hash(int *a, unsigned c)
-{
-	unsigned h=0,g=0;
-	for(unsigned i=0;i<c;++i) {
-		h=(h<<4)+a[i];
-		if((g=(h&0xf0000000))) h^=g>>23;
-		h&=~g;
-	}
-	return h;
-}
-
-int main()
-{
-	srand(time(NULL));
-	initscr();
-	noecho();
-	cbreak();
-	halfdelay(1);
-	int rows, cols;
-	getmaxyx(stdscr, rows, cols);
-	
-	Life *life = newLife(cols, rows);
-	bigBang(life);
-	while(getch() != 'q') {
-		erase();
-		for(int x = 0; x < life->width; x++) {
-			for(int y = 0; y < life->height; y++) {
-				if(life->map[x + y * life->width]) {
-					mvaddch(y, x, '@');
-				}
-			}
-		}
-		refresh();
-
-		tick(life);
-	}
-	freeLife(life);
-
-	echo();
-	endwin();
-	return 0;
-}
+#include "life.h"
 
 void tick(Life *life)
 {
@@ -140,4 +84,13 @@ void freeLife(Life *life)
 	delete life;
 }
 
-
+unsigned hash(int *a, unsigned c)
+{
+	unsigned h=0,g=0;
+	for(unsigned i=0;i<c;++i) {
+		h=(h<<4)+a[i];
+		if((g=(h&0xf0000000))) h^=g>>23;
+		h&=~g;
+	}
+	return h;
+}

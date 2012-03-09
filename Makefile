@@ -1,11 +1,11 @@
-LIBS     = -lncurses
+LIBS     = -lncurses -lSDL
 TARGET   = life
-LANG     = cpp
+OBJECTS  = main.o life.o
 CXXFLAGS = -Wall
 
 all: $(TARGET)
 
-$(TARGET): $(TARGET).$(LANG)
+$(TARGET): $(OBJECTS)
 	$(CXX) $^ $(CXXFLAGS) $(LIBS) -o $@ 
 
 run: $(TARGET)
@@ -14,3 +14,5 @@ run: $(TARGET)
 clean:
 	$(RM) $(TARGET)
 
+main.o:
+life.o:
