@@ -1,26 +1,16 @@
 LIBS     = -lncurses
 TARGET   = life
-OBJECTS  = main.o
-VERSION  = 1.0.0
+LANG     = cpp
 CXXFLAGS = -Wall
-TARBALL  = ../$(TARGET)-$(VERSION).tar.bz2
 
 all: $(TARGET)
 
-$(TARGET): $(OBJECTS)
+$(TARGET): $(TARGET).$(LANG)
 	$(CXX) $^ $(CXXFLAGS) $(LIBS) -o $@ 
 
 run: $(TARGET)
 	./$(TARGET)
 
-.PHONY: clean bak
 clean:
-	$(RM) *.o $(TARGET)
-
-bak:
-	tar cjf $(TARBALL) ..
-
-###################################################
-
-main.o: 
+	$(RM) $(TARGET)
 
