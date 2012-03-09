@@ -1,6 +1,6 @@
 /** main.cpp - Conway's Game of Life.
  * author antifin
- * version 1.0.1
+ * version 2.0.0
  * license WTFPLv2
  */
 

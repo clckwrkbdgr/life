@@ -12,7 +12,7 @@ run: $(TARGET)
 	./$(TARGET)
 
 clean:
-	$(RM) $(TARGET)
+	$(RM) $(TARGET) $(OBJECTS)
 
 main.o:
 life.o:
