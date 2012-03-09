@@ -63,8 +63,10 @@ public:
 
 class SDLDisplay : public Display {
 public:
-	enum { VIDEODEPTH = 32 };
+	enum { CELLSIZE = 5, WIDTH = 1280, HEIGHT = 1024, DELAY = 50, VIDEODEPTH = 32 };
+	enum { CELLCOLOR = 0x002f5fff, BKCOLOR = 0 };
 	SDL_Surface * screen;
+	SDL_Surface * cell;
 
 	SDLDisplay() : Display(), screen(NULL) {
 		if(SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -73,15 +75,21 @@ public:
 		}
 		atexit(SDL_Quit);
 
-		setWidth(640);
-		setHeight(480);
-		screen = SDL_SetVideoMode(width(), height(), VIDEODEPTH, SDL_SWSURFACE);
+		setWidth(WIDTH / CELLSIZE);
+		setHeight(HEIGHT / CELLSIZE);
+		screen = SDL_SetVideoMode(WIDTH, HEIGHT, VIDEODEPTH, SDL_FULLSCREEN);
 		if(!screen) {
-			fprintf(stderr, "Unable to set %dx%dx%d video mode: %s\n", width(), height(), VIDEODEPTH, SDL_GetError());
+			fprintf(stderr, "Unable to set %dx%dx%d video mode: %s\n", WIDTH, HEIGHT, VIDEODEPTH, SDL_GetError());
 			exit(1);
 		}
+
+		cell = SDL_CreateRGBSurface(0, CELLSIZE, CELLSIZE, VIDEODEPTH, 0, 0, 0, 0);
+		SDL_FillRect(cell, NULL, CELLCOLOR);
 	}
 	virtual ~SDLDisplay() {
+		if(cell) {
+			SDL_FreeSurface(cell);
+		}
 		if(screen) {
 			SDL_FreeSurface(screen);
 		}
@@ -97,14 +105,19 @@ public:
 	}
 
 	virtual void prepareOutput() {
-		SDL_FillRect(screen,NULL,0x000000);
+		SDL_FillRect(screen, NULL, BKCOLOR);
 		if( SDL_MUSTLOCK( screen ) ) {
 			SDL_LockSurface( screen );
 		} 
 	}
 	virtual void output(int x, int y, int value) {
 		if(value) {
-			put_pixel32(screen, x, y, 0xffffff);
+			SDL_Rect dest;
+			dest.x = x * CELLSIZE;
+			dest.y = y * CELLSIZE;
+			dest.w = CELLSIZE;
+			dest.h = CELLSIZE;
+			SDL_BlitSurface(cell, NULL, screen, &dest);
 		}
 	}
 	virtual void doneOutput() {
@@ -116,6 +129,7 @@ public:
 			exit(1);
 		}
 
+		SDL_Delay(DELAY);
 	}
 private:
 	void put_pixel32( SDL_Surface *surface, int x, int y, Uint32 pixel ) {
