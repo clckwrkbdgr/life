@@ -63,7 +63,9 @@ public:
 
 class SDLDisplay : public Display {
 public:
-	enum { CELLSIZE = 5, WIDTH = 1280, HEIGHT = 1024, DELAY = 50, VIDEODEPTH = 32 };
+	static int WIDTH;
+	static int HEIGHT;
+	enum { CELLSIZE = 5/*, WIDTH = 1280, HEIGHT = 1024*/, DELAY = 50, VIDEODEPTH = 32 };
 	enum { CELLCOLOR = 0x002f5fff, BKCOLOR = 0 };
 	SDL_Surface * screen;
 	SDL_Surface * cell;
@@ -138,8 +140,25 @@ private:
 	} 
 };
 
-int main()
+int SDLDisplay::WIDTH = 640;
+int SDLDisplay::HEIGHT = 480;
+
+int resolution_arg_to_string(const char * str)
 {
+	int result = atoi(str);
+	if(result == 0) {
+		fprintf(stderr, "'%s' is wrong resolution parameter!\n", str);
+		exit(1);
+	}
+	return result;
+}
+
+int main(int argc, char ** argv)
+{
+	if(argc > 2) {
+		SDLDisplay::WIDTH  = resolution_arg_to_string(argv[1]);
+		SDLDisplay::HEIGHT = resolution_arg_to_string(argv[2]);
+	}
 	Display * display = new SDLDisplay();
 
 	srand(time(NULL));
