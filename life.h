@@ -1,24 +1,15 @@
-/** life.h - Conway's Game of Life definition and management.
- * author antifin
- * version 2.0.0
- * license WTFPLv2
- */
-
 #pragma once
-
-const int HASH_COUNT = 10;
+#include <vector>
 
 struct Life {
-	int *map,*buffer;
-	int width,height;
-	unsigned int hashes[HASH_COUNT];
-	int currentHashIndex;
+	typedef std::vector<char> Map;
+	int width, height;
+	Map map, buffer;
+	std::vector<unsigned> hashes;
+	int current_hash_index;
+
+	Life(int field_width, int field_height);
+	void bigBang();
+	void tick();
 };
-
-Life* newLife(int width,int height);
-void bigBang(Life *life);
-void tick(Life *life);
-void freeLife(Life *life);
-unsigned hash(int *a, unsigned c);
-
 
