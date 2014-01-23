@@ -1,8 +1,10 @@
 #include "console.h"
 #include <ncurses.h>
 
+static chtype CELL = '0';
+
 Ncurses::Ncurses()
-	: Display()
+	: Display(), double_width_char(false)
 {
 	initscr();
 	noecho();
@@ -13,6 +15,14 @@ Ncurses::Ncurses()
 	getmaxyx(stdscr, rows, cols);
 	setWidth(cols);
 	setHeight(rows);
+
+	if(has_colors()) {
+		start_color();
+		init_pair(1, COLOR_BLACK, COLOR_BLUE);
+		CELL = ' ' | COLOR_PAIR(1);
+		setWidth(width() / 2);
+		double_width_char = true;
+	}
 }
 
 Ncurses::~Ncurses()
@@ -33,8 +43,15 @@ void Ncurses::prepareOutput()
 
 void Ncurses::output(int x, int y, int value)
 {
-	if(value) {
-		mvaddch(y, x, '0');
+	if(double_width_char) {
+		if(value) {
+			mvaddch(y, x * 2, CELL);
+			mvaddch(y, x * 2 + 1, CELL);
+		}
+	} else {
+		if(value) {
+			mvaddch(y, x, CELL);
+		}
 	}
 }
 

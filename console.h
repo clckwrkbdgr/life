@@ -9,5 +9,7 @@ public:
 	virtual void prepareOutput();
 	virtual void output(int x, int y, int value);
 	virtual void doneOutput();
+private:
+	bool double_width_char;
 };
 
