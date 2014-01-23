@@ -64,6 +64,7 @@ void Life::tick()
 		bool loopIsDetected = hashes[i] == currentHash;
 		if(loopIsDetected) {
 			bigBang();
+			break;
 		}
 	}
 
