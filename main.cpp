@@ -34,6 +34,7 @@ public:
 		initscr();
 		noecho();
 		cbreak();
+		curs_set(FALSE);
 		halfdelay(1);
 		int rows, cols;
 		getmaxyx(stdscr, rows, cols);
@@ -159,25 +160,24 @@ int main(int argc, char ** argv)
 		SDLDisplay::WIDTH  = resolution_arg_to_string(argv[1]);
 		SDLDisplay::HEIGHT = resolution_arg_to_string(argv[2]);
 	}
-	Display * display = new SDLDisplay();
+	Ncurses display;
 
 	srand(time(NULL));
 
-	Life *life = newLife(display->width(), display->height());
+	Life *life = newLife(display.width(), display.height());
 	bigBang(life);
-	while(!display->quit()) {
-		display->prepareOutput();
+	while(!display.quit()) {
+		display.prepareOutput();
 		for(int x = 0; x < life->width; x++) {
 			for(int y = 0; y < life->height; y++) {
-				display->output(x, y, life->map[x + y * life->width]);
+				display.output(x, y, life->map[x + y * life->width]);
 			}
 		}
-		display->doneOutput();
+		display.doneOutput();
 
 		tick(life);
 	}
 	freeLife(life);
 
-	delete display;
 	return 0;
 }

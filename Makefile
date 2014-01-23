@@ -9,7 +9,7 @@ $(TARGET): $(OBJECTS)
 	$(CXX) $^ $(CXXFLAGS) $(LIBS) -o $@ 
 
 run: $(TARGET)
-	./$(TARGET)
+	screen ./$(TARGET)
 
 clean:
 	$(RM) $(TARGET) $(OBJECTS)
