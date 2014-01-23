@@ -1,7 +1,9 @@
 LIBS     = -lncurses -lSDL
 TARGET   = life
-OBJECTS  = main.o life.o
-CXXFLAGS = -Wall
+#WARNINGS = -pedantic -Werror -Wall -Wextra -Wformat=2 -Wmissing-include-dirs -Wswitch-default -Wswitch-enum -Wuninitialized -Wunused -Wfloat-equal -Wundef -Wno-endif-labels -Wshadow -Wcast-qual -Wcast-align -Wconversion -Wsign-conversion -Wlogical-op -Wmissing-declarations -Wno-multichar -Wredundant-decls -Wunreachable-code -Winline -Winvalid-pch -Wvla -Wdouble-promotion -Wzero-as-null-pointer-constant -Wuseless-cast -Wvarargs -Wsuggest-attribute=pure -Wsuggest-attribute=const -Wsuggest-attribute=noreturn -Wsuggest-attribute=format
+CXXFLAGS = -MD -MP -std=c++0x $(WARNINGS)
+SOURCES = $(wildcard *.cpp)
+OBJECTS = $(addprefix tmp/,$(SOURCES:.cpp=.o))
 
 all: $(TARGET)
 
@@ -11,8 +13,14 @@ $(TARGET): $(OBJECTS)
 run: $(TARGET)
 	screen ./$(TARGET)
 
-clean:
-	$(RM) $(TARGET) $(OBJECTS)
+tmp/%.o: %.cpp
+	@echo Compiling $<...
+	@$(CXX) $(CXXFLAGS) -c -fpic $< -o $@
 
-main.o:
-life.o:
+.PHONY: clean Makefile
+
+clean:
+	$(RM) -rf $(TARGET) tmp/*
+
+$(shell mkdir -p tmp)
+-include $(OBJECTS:%.o=%.d)
