@@ -8,7 +8,7 @@ unsigned hash(Iterator start, Iterator stop)
 	unsigned h = 0, g = 0;
 	for(Iterator current = start; current != stop; ++current) {
 		h = (h << 4) + *current;
-		if(g = (h & 0xf0000000)) {
+		if((g = (h & 0xf0000000))) {
 			h ^= g >> 23;
 		}
 		h &= ~g;
