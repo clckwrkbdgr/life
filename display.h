@@ -1,4 +1,5 @@
 #pragma once
+class Life;
 
 class Display {
 public:
@@ -11,9 +12,7 @@ public:
 	void setHeight(int value) { h = value; }
 
 	virtual bool quit() const = 0;
-	virtual void prepareOutput() = 0;
-	virtual void output(int x, int y, int value) = 0;
-	virtual void doneOutput() = 0;
+	virtual void output(const Life & life) = 0;
 private:
 	int w, h;
 };

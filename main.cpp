@@ -22,14 +22,7 @@ void run(Display & display)
 	Life life(display.width(), display.height());
 	life.bigBang();
 	while(!display.quit()) {
-		display.prepareOutput();
-		for(int x = 0; x < life.width; x++) {
-			for(int y = 0; y < life.height; y++) {
-				display.output(x, y, life.map[x + y * life.width]);
-			}
-		}
-		display.doneOutput();
-
+		display.output(life);
 		life.tick();
 	}
 }

@@ -1,4 +1,5 @@
 #include "graphic.h"
+#include "life.h"
 #include <SDL/SDL.h>
 
 int SDLDisplay::WIDTH = 1366;
@@ -46,28 +47,26 @@ bool SDLDisplay::quit() const
 	return false;
 }
 
-void SDLDisplay::prepareOutput()
+void SDLDisplay::output(const Life & life)
 {
 	SDL_FillRect(screen, NULL, BKCOLOR);
 	if( SDL_MUSTLOCK( screen ) ) {
 		SDL_LockSurface( screen );
 	} 
-}
 
-void SDLDisplay::output(int x, int y, int value)
-{
-	if(value) {
-		SDL_Rect dest;
-		dest.x = x * CELLSIZE;
-		dest.y = y * CELLSIZE;
-		dest.w = CELLSIZE;
-		dest.h = CELLSIZE;
-		SDL_BlitSurface(cell, NULL, screen, &dest);
+	for(int x = 0; x < life.width; x++) {
+		for(int y = 0; y < life.height; y++) {
+			if(life.map[x + y * life.width]) {
+				SDL_Rect dest;
+				dest.x = x * CELLSIZE;
+				dest.y = y * CELLSIZE;
+				dest.w = CELLSIZE;
+				dest.h = CELLSIZE;
+				SDL_BlitSurface(cell, NULL, screen, &dest);
+			}
+		}
 	}
-}
 
-void SDLDisplay::doneOutput()
-{
 	if( SDL_MUSTLOCK( screen ) ) {
 		SDL_UnlockSurface( screen );
 	} 
@@ -79,7 +78,8 @@ void SDLDisplay::doneOutput()
 	SDL_Delay(DELAY);
 }
 
-void SDLDisplay::put_pixel32( SDL_Surface *surface, int x, int y, uint32_t pixel ) {
+void SDLDisplay::put_pixel32(SDL_Surface *surface, int x, int y, uint32_t pixel)
+{
 	Uint32 *pixels = (Uint32 *)surface->pixels;
 	pixels[ ( y * surface->w ) + x ] = pixel;
 } 

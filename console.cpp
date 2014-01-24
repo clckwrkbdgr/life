@@ -1,4 +1,5 @@
 #include "console.h"
+#include "life.h"
 #include <ncurses.h>
 
 static chtype CELL = '0';
@@ -36,25 +37,29 @@ bool Ncurses::quit() const
 	return getch() == 'q';
 }
 
-void Ncurses::prepareOutput()
+void Ncurses::output(const Life & life)
 {
 	erase();
-}
 
-void Ncurses::output(int x, int y, int value)
-{
 	if(double_width_char) {
-		if(value) {
-			mvaddch(y, x * 2, CELL);
-			mvaddch(y, x * 2 + 1, CELL);
+		for(int x = 0; x < life.width; x++) {
+			for(int y = 0; y < life.height; y++) {
+				if(life.map[x + y * life.width]) {
+					mvaddch(y, x * 2, CELL);
+					mvaddch(y, x * 2 + 1, CELL);
+				}
+			}
 		}
 	} else {
-		if(value) {
-			mvaddch(y, x, CELL);
+		for(int x = 0; x < life.width; x++) {
+			for(int y = 0; y < life.height; y++) {
+				if(life.map[x + y * life.width]) {
+					mvaddch(y, x, CELL);
+				}
+			}
 		}
 	}
-}
 
-void Ncurses::doneOutput() {
 	refresh();
 }
+

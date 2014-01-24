@@ -15,9 +15,7 @@ public:
 	SDLDisplay();
 	virtual ~SDLDisplay();
 	virtual bool quit() const;
-	virtual void prepareOutput();
-	virtual void output(int x, int y, int value);
-	virtual void doneOutput();
+	virtual void output(const Life & life);
 private:
 	void put_pixel32(SDL_Surface *surface, int x, int y, uint32_t pixel);
 };

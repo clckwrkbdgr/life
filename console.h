@@ -6,9 +6,7 @@ public:
 	Ncurses();
 	virtual ~Ncurses();
 	virtual bool quit() const;
-	virtual void prepareOutput();
-	virtual void output(int x, int y, int value);
-	virtual void doneOutput();
+	virtual void output(const Life & life);
 private:
 	bool double_width_char;
 };
