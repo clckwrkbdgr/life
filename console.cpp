@@ -39,28 +39,15 @@ void Ncurses::output(const Life & life)
 
 	for(int x = 0; x < life.width; x++) {
 		for(int y = 0; y < life.height; y += 2) {
-			bool up = life.map[x + (y) * life.width] == 1;
-			bool down = life.map[x + (y + 1) * life.width] == 1;
+			int up = life.map[x + (y) * life.width];
+			int down = life.map[x + (y + 1) * life.width];
 
 			cchar_t t;
-			t.attr = COLOR_PAIR(1);
+			t.attr = up ? COLOR_PAIR(2) : COLOR_PAIR(1);
+			t.chars[0] = (up == down) ? ' ' : 0x2584; // LOWER HALF BLOCK
 			t.chars[1] = 0;
 
-			move(y / 2, x);
-			if(up && down) {
-				t.attr = COLOR_PAIR(2);
-				t.chars[0] = ' ';
-			} else if(up) {
-				t.attr = COLOR_PAIR(2);
-				t.chars[0] = 0x2584;
-			} else if(down) {
-				t.attr = COLOR_PAIR(1);
-				t.chars[0] = 0x2584;
-			} else {
-				t.attr = COLOR_PAIR(1);
-				t.chars[0] = ' ';
-			}
-			add_wch(&t);
+			mvadd_wch(y / 2, x, &t);
 		}
 	}
 
