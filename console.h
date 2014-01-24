@@ -7,7 +7,5 @@ public:
 	virtual ~Ncurses();
 	virtual bool quit() const;
 	virtual void output(const Life & life);
-private:
-	int mode;
 };
 

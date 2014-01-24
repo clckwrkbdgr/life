@@ -1,14 +1,12 @@
 #include "console.h"
 #include "life.h"
-#include <ncurses.h>
-
-static chtype CELL = '0';
-
-enum { DRAW_ZERO, DRAW_DOUBLE_BLOCK, DRAW_HALF_BLOCK };
+#include <ncursesw/ncurses.h>
+#include <locale.h>
 
 Ncurses::Ncurses()
-	: Display(), mode(DRAW_ZERO)
+	: Display()
 {
+	setlocale(LC_ALL, "");
 	initscr();
 	noecho();
 	cbreak();
@@ -17,15 +15,11 @@ Ncurses::Ncurses()
 	int rows, cols;
 	getmaxyx(stdscr, rows, cols);
 	setWidth(cols);
-	setHeight(rows);
+	setHeight(rows * 2);
 
-	if(has_colors()) {
-		start_color();
-		init_pair(1, COLOR_BLACK, COLOR_BLUE);
-		CELL = ' ' | COLOR_PAIR(1);
-		setWidth(width() / 2);
-		mode = DRAW_DOUBLE_BLOCK;
-	}
+	start_color();
+	init_pair(1, COLOR_BLUE, COLOR_BLACK);
+	init_pair(2, COLOR_BLACK, COLOR_BLUE);
 }
 
 Ncurses::~Ncurses()
@@ -43,22 +37,30 @@ void Ncurses::output(const Life & life)
 {
 	erase();
 
-	if(mode == DRAW_DOUBLE_BLOCK) {
-		for(int x = 0; x < life.width; x++) {
-			for(int y = 0; y < life.height; y++) {
-				if(life.map[x + y * life.width]) {
-					mvaddch(y, x * 2, CELL);
-					mvaddch(y, x * 2 + 1, CELL);
-				}
+	for(int x = 0; x < life.width; x++) {
+		for(int y = 0; y < life.height; y += 2) {
+			bool up = life.map[x + (y) * life.width] == 1;
+			bool down = life.map[x + (y + 1) * life.width] == 1;
+
+			cchar_t t;
+			t.attr = COLOR_PAIR(1);
+			t.chars[1] = 0;
+
+			move(y / 2, x);
+			if(up && down) {
+				t.attr = COLOR_PAIR(2);
+				t.chars[0] = ' ';
+			} else if(up) {
+				t.attr = COLOR_PAIR(2);
+				t.chars[0] = 0x2584;
+			} else if(down) {
+				t.attr = COLOR_PAIR(1);
+				t.chars[0] = 0x2584;
+			} else {
+				t.attr = COLOR_PAIR(1);
+				t.chars[0] = ' ';
 			}
-		}
-	} else { // DRAW_ZERO
-		for(int x = 0; x < life.width; x++) {
-			for(int y = 0; y < life.height; y++) {
-				if(life.map[x + y * life.width]) {
-					mvaddch(y, x, CELL);
-				}
-			}
+			add_wch(&t);
 		}
 	}
 
