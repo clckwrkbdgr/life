@@ -4,8 +4,10 @@
 
 static chtype CELL = '0';
 
+enum { DRAW_ZERO, DRAW_DOUBLE_BLOCK, DRAW_HALF_BLOCK };
+
 Ncurses::Ncurses()
-	: Display(), double_width_char(false)
+	: Display(), mode(DRAW_ZERO)
 {
 	initscr();
 	noecho();
@@ -22,7 +24,7 @@ Ncurses::Ncurses()
 		init_pair(1, COLOR_BLACK, COLOR_BLUE);
 		CELL = ' ' | COLOR_PAIR(1);
 		setWidth(width() / 2);
-		double_width_char = true;
+		mode = DRAW_DOUBLE_BLOCK;
 	}
 }
 
@@ -41,7 +43,7 @@ void Ncurses::output(const Life & life)
 {
 	erase();
 
-	if(double_width_char) {
+	if(mode == DRAW_DOUBLE_BLOCK) {
 		for(int x = 0; x < life.width; x++) {
 			for(int y = 0; y < life.height; y++) {
 				if(life.map[x + y * life.width]) {
@@ -50,7 +52,7 @@ void Ncurses::output(const Life & life)
 				}
 			}
 		}
-	} else {
+	} else { // DRAW_ZERO
 		for(int x = 0; x < life.width; x++) {
 			for(int y = 0; y < life.height; y++) {
 				if(life.map[x + y * life.width]) {

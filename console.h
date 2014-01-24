@@ -8,6 +8,6 @@ public:
 	virtual bool quit() const;
 	virtual void output(const Life & life);
 private:
-	bool double_width_char;
+	int mode;
 };
 
