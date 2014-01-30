@@ -2,11 +2,20 @@
 #include "life.h"
 const int HASH_COUNT = 10;
 
-Life::Life(int field_width, int field_height)
+void big_bang(Cell * map, int width, int height)
+{
+	for(int i = 0; i < width * height; i++) {
+		map[i] = (rand() % 2);
+	}
+}
+
+Life::Life(int field_width, int field_height, LifeSeed life_seed)
 	: width(field_width), height(field_height),
 	map(width * height, 0), buffer(width * height, 0),
-	hashes(HASH_COUNT, 0), current_hash_index(0)
+	hashes(HASH_COUNT, 0), current_hash_index(0),
+	seed(life_seed ? life_seed : big_bang)
 {
+	restart();
 }
 
 void Life::tick()
@@ -56,7 +65,7 @@ void Life::tick()
 	for(int i = 0; i < HASH_COUNT; i++) {
 		bool loopIsDetected = hashes[i] == currentHash;
 		if(loopIsDetected) {
-			bigBang();
+			restart();
 			break;
 		}
 	}
@@ -68,10 +77,8 @@ void Life::tick()
 	}
 }
 
-void Life::bigBang()
+void Life::restart()
 {
-	for(int i = 0; i < width * height; i++) {
-		map[i] = (rand() % 2);
-	}
+	seed(&map.front(), width, height);
 }
 

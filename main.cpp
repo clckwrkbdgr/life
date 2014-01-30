@@ -7,8 +7,7 @@ int main(int /*argc*/, char ** /*argv*/)
 {
 	srand(time(NULL));
 	Ncurses display;
-	Life life(display.width(), display.height());
-	life.bigBang();
+	Life life(display.width(), display.height(), glider);
 	while(!display.quit()) {
 		display.output(life);
 		life.tick();
