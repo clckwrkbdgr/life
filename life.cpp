@@ -81,6 +81,7 @@ void Life::tick()
 
 void Life::restart()
 {
+	std::fill(hashes.begin(), hashes.end(), 0);
 	seed->run(&map.front(), width, height);
 }
 
