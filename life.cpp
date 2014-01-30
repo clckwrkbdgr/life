@@ -2,18 +2,20 @@
 #include "life.h"
 const int HASH_COUNT = 10;
 
-void big_bang(Cell * map, int width, int height)
-{
-	for(int i = 0; i < width * height; i++) {
-		map[i] = (rand() % 2);
+struct BigBang : LifeSeed {
+	void run(Cell * map, int width, int height)
+	{
+		for(int i = 0; i < width * height; i++) {
+			map[i] = (rand() % 2);
+		}
 	}
-}
+};
 
-Life::Life(int field_width, int field_height, LifeSeed life_seed)
+Life::Life(int field_width, int field_height, LifeSeed * life_seed)
 	: width(field_width), height(field_height),
 	map(width * height, 0), buffer(width * height, 0),
 	hashes(HASH_COUNT, 0), current_hash_index(0),
-	seed(life_seed ? life_seed : big_bang)
+	seed(life_seed ? life_seed : new BigBang())
 {
 	restart();
 }
@@ -79,6 +81,6 @@ void Life::tick()
 
 void Life::restart()
 {
-	seed(&map.front(), width, height);
+	seed->run(&map.front(), width, height);
 }
 

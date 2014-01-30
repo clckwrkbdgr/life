@@ -2,7 +2,9 @@
 #include <vector>
 
 typedef char Cell;
-typedef void (*LifeSeed)(Cell * array, int width, int height);
+struct LifeSeed {
+	virtual void run(Cell * array, int width, int height) = 0;
+};
 
 struct Life {
 	typedef std::vector<Cell> Map;
@@ -10,9 +12,9 @@ struct Life {
 	Map map, buffer;
 	std::vector<unsigned> hashes;
 	int current_hash_index;
-	LifeSeed seed;
+	LifeSeed * seed;
 
-	Life(int field_width, int field_height, LifeSeed life_seed = 0);
+	Life(int field_width, int field_height, LifeSeed * life_seed = 0);
 	void restart();
 	void tick();
 };
