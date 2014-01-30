@@ -97,8 +97,6 @@ int main(int argc, char ** argv)
 	LifeSeed * seed = 0;
 	if(file_seed && file_seed->has_content()) {
 		seed = file_seed;
-	} else {
-		seed = new TextSeed(gun);
 	}
 	Life life(display.width(), display.height(), seed);
 	while(!display.quit()) {
