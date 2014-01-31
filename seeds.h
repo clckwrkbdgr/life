@@ -4,8 +4,10 @@
 
 struct TextSeed : LifeSeed {
 	const char * text;
-	TextSeed(const char * seed_text) : text(seed_text) {}
+	TextSeed(const char * seed_text);
 	virtual void run(Cell * map, int width, int height);
+private:
+	int pattern_width, pattern_height;
 };
 
 struct StreamSeed : LifeSeed {
