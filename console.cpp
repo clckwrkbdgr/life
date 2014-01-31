@@ -11,7 +11,7 @@ Ncurses::Ncurses()
 	noecho();
 	cbreak();
 	curs_set(FALSE);
-	halfdelay(1);
+	timeout(48);
 	int rows, cols;
 	getmaxyx(stdscr, rows, cols);
 	setWidth(cols);

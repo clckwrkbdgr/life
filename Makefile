@@ -10,7 +10,7 @@ $(TARGET): $(OBJECTS)
 	$(CXX) $^ $(CXXFLAGS) $(LIBS) -o $@ 
 
 run: $(TARGET)
-	screen ./$(TARGET) gun
+	screen ./$(TARGET)
 
 tmp/%.o: %.cpp
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
