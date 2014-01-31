@@ -1,41 +1,25 @@
 #include "seeds.h"
 #include "life.h"
+#include "patterns.h"
 #include "console.h"
 #include <fstream>
 #include <ctime>
 #include <cstdlib>
 #include <cstring>
 
-static const char glider[] =
-"@ @\n"
-" @@\n"
-" @ \n"
-;
-
-static const char gun[] =
-"                           @\n"
-"                          @ @\n"
-"         @@               @@ @\n"
-"         @ @              @@ @@   @@\n"
-"    @@      @             @@ @    @@\n"
-"@@ @  @  @  @             @ @\n"
-"@@  @@      @              @\n"
-"         @ @              \n"
-"         @@               \n"
-;
-
 int main(int argc, char ** argv)
 {
 	srand(time(NULL));
 	Ncurses display;
-	StreamSeed * file_seed = 0;
-	if(argc > 1) {
-		std::ifstream file(argv[1]);
-		file_seed = new StreamSeed(file, display.width(), display.height());
-	}
+	PatternFactory patterns;
 	LifeSeed * seed = 0;
-	if(file_seed && file_seed->has_content()) {
-		seed = file_seed;
+	if(argc > 1) {
+		if(patterns.has_pattern(argv[1])) {
+			seed = new TextSeed(patterns.get_pattern(argv[1]));
+		} else {
+			std::ifstream file(argv[1]);
+			seed = new StreamSeed(file, display.width(), display.height());
+		}
 	}
 	Life life(display.width(), display.height(), seed);
 	while(!display.quit()) {
