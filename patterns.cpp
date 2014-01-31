@@ -1,12 +1,13 @@
 #include "patterns.h"
 
-static const char glider[] =
+static const Pattern predefined_patterns[] = {
+{"glider", "Common glider",
 "@ @\n"
 " @@\n"
 " @ \n"
-;
+}
 
-static const char gun[] =
+,{"gun", "Glider gun",
 "                           @\n"
 "                          @ @\n"
 "         @@               @@ @\n"
@@ -16,13 +17,16 @@ static const char gun[] =
 "@@  @@      @              @\n"
 "         @ @              \n"
 "         @@               \n"
-;
+}
+
+};
 
 
 PatternFactory::PatternFactory()
 {
-	patterns["glider"] = glider;
-	patterns["gun"] = gun;
+	for(const Pattern & pattern : predefined_patterns) {
+		patterns[pattern.name] = &pattern;
+	}
 }
 
 bool PatternFactory::has_pattern(const std::string & name) const
@@ -32,6 +36,6 @@ bool PatternFactory::has_pattern(const std::string & name) const
 
 const char * PatternFactory::get_pattern(const std::string & name) const
 {
-	return patterns.at(name);
+	return patterns.at(name)->pattern;
 }
 
