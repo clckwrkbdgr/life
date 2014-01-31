@@ -9,6 +9,21 @@
 
 int main(int argc, char ** argv)
 {
+	if(argc > 1 && strcmp(argv[1], "--help") == 0) {
+		std::cout << "Conway's game of life ncurses implementation.\n";
+		std::cout << "Needs libncursesw and terminal with colour and Unicode support.\n";
+		std::cout << "Usage:\n";
+		std::cout << "\tlife --help\n";
+		std::cout << "\tlife PATTERN_NAME\n";
+		std::cout << "\tlife FILE_NAME\n";
+		std::cout << "PATTERN_NAME is a name from the list below. If no such pattern exists,\n";
+		std::cout << "it is treated as a file name.\n";
+		std::cout << '\n';
+		std::cout << "Pattern list:\n";
+		PatternFactory::print_list();
+		std::cout << std::endl;
+		return 0;
+	}
 	srand(time(NULL));
 	Ncurses display;
 	PatternFactory patterns;

@@ -1,4 +1,5 @@
 #include "patterns.h"
+#include <iostream>
 
 static const Pattern predefined_patterns[] = {
 {"glider", "Common glider",
@@ -39,3 +40,9 @@ const char * PatternFactory::get_pattern(const std::string & name) const
 	return patterns.at(name)->pattern;
 }
 
+void PatternFactory::print_list()
+{
+	for(const Pattern & pattern : predefined_patterns) {
+		std::cout << pattern.name << " - " << pattern.description << '\n';
+	}
+}
