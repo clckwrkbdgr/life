@@ -20,6 +20,45 @@ static const Pattern predefined_patterns[] = {
 "         @@               \n"
 }
 
+,{"r-pentomino", "R-pentomino Methuselah",
+	" @@\n"
+	"@@\n"
+	" @\n"
+}
+
+,{"diehard", "Diehard Methuselah",
+	"      @\n"
+	"@@\n"
+	" @   @@@\n"
+}
+
+,{"acorn", "Acorn Methuselah",
+	" @\n"
+	"   @\n"
+	"@@  @@@\n"
+}
+
+,{"infinite1", "Infinite pattern",
+"      @\n"
+"    @ @@\n"
+"    @ @\n"
+"    @\n"
+"  @\n"
+"@ @\n"
+}
+
+,{"infinite2", "Infinite pattern",
+"@@@ @\n"
+"@    \n"
+"   @@\n"
+" @@ @\n"
+"@ @ @\n"
+}
+
+,{"infinite3", "Infinite pattern",
+	"@@@@@@@@ @@@@@   @@@      @@@@@@@ @@@@@"
+}
+
 };
 
 
