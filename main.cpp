@@ -1,3 +1,4 @@
+#include "seeds.h"
 #include "life.h"
 #include "console.h"
 #include <fstream>
@@ -22,68 +23,6 @@ static const char gun[] =
 "         @ @              \n"
 "         @@               \n"
 ;
-
-
-struct TextSeed : LifeSeed {
-	const char * text;
-	TextSeed(const char * seed_text) : text(seed_text) {}
-	void run(Cell * map, int width, int height)
-	{
-		Cell * end = map + width * height;
-		std::fill(map, end, 0);
-		int pos = 0;
-		for(const char * ch = text; *ch != 0; ++ch) {
-			if(pos >= width || *ch == '\n') {
-				pos = 0;
-				map += width;
-				if(map == end) {
-					break;
-				}
-			} else {
-				map[pos++] = (*ch == ' ' ? 0 : 1);
-			}
-		}
-	}
-};
-
-struct StreamSeed : LifeSeed {
-	bool has_content() const
-	{
-		return !pattern.empty();
-	}
-	StreamSeed(std::istream & stream, int width, int height)
-		: pattern(width * height, 0)
-	{
-		if(!stream.good()) {
-			pattern.clear();
-			return;
-		}
-		int pos = 0;
-		char ch;
-		std::vector<Cell>::iterator map = pattern.begin();
-		stream.unsetf(std::ios::skipws);
-		while(stream.good()) {
-			stream >> ch;
-			if(pos >= width || ch == '\n') {
-				pos = 0;
-				map += width;
-				if(map == pattern.end()) {
-					break;
-				}
-			} else {
-				*(map + pos++) = (ch == ' ' ? 0 : 1);
-			}
-		}
-	}
-	void run(Cell * map, int /*width*/, int /*height*/)
-	{
-		if(has_content()) {
-			std::copy(pattern.begin(), pattern.end(), map);
-		}
-	}
-private:
-	std::vector<Cell> pattern;
-};
 
 int main(int argc, char ** argv)
 {
